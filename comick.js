@@ -23,14 +23,7 @@ async function getHTML(url) {
     console.log("ERROR: ", exception);
   }
 }
-(async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto("https://www.example.com");
-  const html = await page.evaluate(() => document.documentElement.outerHTML);
-  console.log(html);
-  await browser.close();
-})();
+
 // getHTML("http://example.com");
 /*
 function getHTML(fileLocation) {
