@@ -1,9 +1,5 @@
 const puppeteer = require("puppeteer");
-const axios = require("axios");
-const cheerio = require("cheerio");
-const fs = require("fs");
-const moment = require("moment");
-const _ = require("lodash");
+
 async function getHTML(url) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();

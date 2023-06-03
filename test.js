@@ -4,26 +4,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const moment = require("moment");
 const _ = require("lodash");
-async function getHTML(url) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
 
-  await page.setUserAgent(
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
-  );
-
-  await page.goto(url);
-
-  const html = await page.content();
-
-  await browser.close();
-  return html;
-}
-getHTML(
-  "https://comick.app/user/8af71eb9-5882-4b12-952f-f8841ab4e331/list"
-).then((response) => {
-  console.log("i'm so drunk", response);
-});
 function getRecList(htmlString) {
   let recLists = [];
   const $ = cheerio.load(htmlString);

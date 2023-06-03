@@ -5,12 +5,11 @@ const moment = require("moment");
 const _ = require("lodash");
 const user = "https://www.openrice.com/en/gourmet/reviews.htm?userid=50121664";
 const list = "https://www.openrice.com/zh/hongkong/explore/chart/best-rating";
-const MANGA_LIST = "https://www.mangago.me/home/mangalist/626481";
+const MANGA_LIST = "https://www.mangago.me/home/mangalist/2359589";
 const LIST_ID = 2359589;
-const getListHTML = fs.readFileSync("./list_page.html");
-let listHTML = getListHTML.toString("utf8");
-const getMangaPageRecs = fs.readFileSync("./manga_page_recs.html");
-let mangaPageRecs = getMangaPageRecs.toString("utf8");
+// const getListHTML = fs.readFileSync("./list_page.html");
+// let listHTML = getListHTML.toString("utf8");
+const { getHTML } = require("./utils")
 let sample_manga_data = [
   {
     title: "Solo Leveling",
@@ -156,43 +155,78 @@ function orderBy(arr) {
   return _.orderBy(arr, "rating", "desc");
 }
 
-function getRecList(htmlString) {
+async function getRecList() {
+  let recLists = []
+  // const $ = cheerio.load(htmlString);
+  //  let navigation = parseInt($(".pagination ol option").length);
+  for (let i = 1; i < 10; i++) {
+    let url = `https://www.mangago.me/home/manga/list/solo_leveling/1/?page=${i}`
+    let html = await getHTML(url);
+    let getList = getOneListData(html)
+    console.log(getList)
+    console.log("LIST", i)
+    recLists.push(getList);
+    recLists = _.flattenDeep(recLists);
+
+  }
+  fs.writeFileSync("./test.json", JSON.stringify(recLists))
+  return recLists;
+}
+
+// getRecList().then((data) => {
+//  console.log(data)
+//})
+function getOneListData(htmlString) {
   let recLists = [];
-  const $ = cheerio.load(mangaPageRecs);
-  let navigation = parseInt($(".pagination ol option").length);
-  // then loop through the navigation here
-  let recLinks = $("tbody tr");
+  const $ = cheerio.load(htmlString);
+  let recLinks = $("div[style='border-bottom:1px dashed #bdbdbd;width:620px;float:left;line-height:25px;padding:10px 0']");
   recLinks.each((index, element) => {
-    let date = $(element).find(".date span").text();
+    let date = $(element).find("span[style='text-align:right;color:#bdbdbd;font-size:13px;width:100px;line-height:50px;']").text();
     if (moment(date).isAfter(moment("2021-12-31"))) {
       let link = $(element)
-        .find("a[style='break-word;color:#4CCCA9;height:25px;']")
+        .find("a[href*=https://www.mangago.me/home/mangalist/]")
         .attr("href");
       let title = $(element)
-        .find("a[style='break-word;color:#4CCCA9;height:25px;']")
-        .text();
+        .find("a[href*=https://www.mangago.me/home/mangalist/]")
+        .text()
       let obj = { title, link, date };
       recLists.push(obj);
     }
   });
   return recLists;
 }
+
 // console.log(getRecList(mangaPageRecs))
 // console.log(recLinks)
 // one at a time
-function getNavigation(htmlString) {
+async function getNavigation(htmlString, listID) {
+  let allData = []
   const $ = cheerio.load(htmlString);
   let navigation = parseInt($(".navigation option").length);
   for (let j = 1; j <= navigation; j++) {
-    let listUrl = `https://www.mangago.me/home/mangalist/${LIST_ID}/?filter=&page=${j}`;
-    // console.log(listUrl)
-    // const getData = await axios.get(listUrl);
-    // const data = getData.data;
-    //
+    let listUrl = `https://www.mangago.me/home/mangalist/${listID}/?filter=&page=${j}`;
+    let mangaData = await getHTML(listUrl);
+    let data = getOnePage(mangaData);
+    allData.push(data)
+    allData = _.flattenDeep(allData)
   }
+  return allData;
 }
-// console.log(getNavigation(listHTML))
+async function getMangaGoList(listID) {
+  let mangaUrl = `https://www.mangago.me/home/mangalist/${listID}`
+  let html = await getHTML(mangaUrl);
+  let data = await getNavigation(html, listID);
+  return data;
+}
 
+// getMangaGoList(LIST_ID).then((response) => {
+//  console.log(response)
+// })
+let recListUrl = "https://www.mangago.me/home/manga/list/solo_leveling/1/"
+
+// getHTML(recListUrl).then((response) => {
+
+// })
 function getOnePage(htmlString) {
   const mangas = [];
   const $ = cheerio.load(htmlString);
