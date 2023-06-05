@@ -8,9 +8,4 @@ To find and compile the best mangas
 
 ## Steps
 
-- Read from html (getHTML(url))
-- Get original list from mangago
-- Get navigation from each list
-- Get mangas from each
-- Get ONE, for now. because it takes too long.
-- Get lists...
+- 

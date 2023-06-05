@@ -1,67 +1,141 @@
+const puppeteer = require("puppeteer");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
 const moment = require("moment");
 const _ = require("lodash");
-const MANGA_LIST = "https://www.mangago.me/home/mangalist/2359589";
-const LIST_ID = 2359589;
-// const getListHTML = fs.readFileSync("./list_page.html");
-// let listHTML = getListHTML.toString("utf8");
-const { getHTML } = require("./utils")
+const { getHTML } = require("./utils");
+
+class MangaGoTest {
+  // get a list of mangas
+  async one() {
+    let listUrl = `https://www.mangago.me/home/mangalist/2359589/?filter=&page=1`;
+    let htmlString = await getHTML(listUrl);
+    let getPage = getOnePage(htmlString);
+    if (getPage.length > 1) {
+      if (getPage[0].title && getPage[0].rating) {
+        console.log("Okay, can get title and rating", getPage[0]);
+      }
+    }
+  }
+  // can get list data
+  async two() {
+    let navData = await getListData("2359589");
+    let length = navData.length - 1;
+    if (navData.length > 1) {
+      if (navData[length].title && navData[length].rating) {
+        console.log("Okay, can get title and rating", navData[length]);
+      } else {
+        console.log("error?");
+      }
+    } else {
+      console.log("error", navData.length);
+    }
+  }
+  // get rec list
+  async three() {
+    let recList = await getRecList("inso_s_law");
+    if (recList.length) {
+      console.log("Works", recList[0]);
+    } else {
+      console.log("no");
+    }
+  }
+  // loop through lists and compare
+  async four() {
+    let myList = "2359589";
+    let toCompare = "inso_s_law";
+    let number1 = 1;
+    let number2 = 2;
+    let data = await loopThroughRecList(myList, toCompare, number1, number2);
+    console.log(data);
+  }
+  async final() {
+    let myList = "2359589";
+    let toCompare = "inso_s_law";
+    let number1 = 201;
+    let number2 = 500;
+    await generateMangaData(myList, toCompare, number1, number2);
+  }
+}
+
+async function generateMangaData(myList, toCompare, number1, number2) {
+  let getRangeOfLists = await loopThroughRecList(
+    myList,
+    toCompare,
+    number1,
+    number2
+  );
+  let fileName = `./data/${toCompare}_${number1}_${number2}.json`;
+  fs.writeFileSync(fileName, getRangeOfLists);
+}
+let test = new MangaGoTest();
+// test.one();
+// test.two();
+// test.three();
+test.final();
+// test.final();
 
 function numberOfSimilarities(arr1, arr2) {
   const similarities = _.intersectionWith(arr1, arr2, _.isEqual);
   return similarities.length;
 }
-function orderBy(arr) {
-  return _.orderBy(arr, "rating", "desc");
+
+async function loopThroughRecList(myList, manga, number1, number2) {
+  let myMangas = await getListData(myList);
+  let getMangas = [];
+  let recList = await getRecList(manga, number1, number2);
+  for (let i = 0; i < recList.length; i++) {
+    let link = recList[i].link;
+    link = link.replace("https://www.mangago.me/home/mangalist/", "");
+    link = link.replace("/", "");
+    let data = await getListData(link);
+    if (numberOfSimilarities(myMangas, data) > 6) {
+      console.log("page", recList[i]);
+      console.log("LINK", link);
+      data = _.orderBy(data, "rating", "desc");
+      let fileName = `./data/${manga}_${link}.json`;
+      let stringed = JSON.stringify(data);
+      fs.writeFileSync(fileName, stringed);
+      getMangas.push(data);
+    }
+  }
+  getMangas = _.flattenDeep(getMangas);
+  getMangas = _.orderBy(getMangas, "rating", "desc");
+  return getMangas;
 }
 
-async function getRecList() {
-  let recLists = []
-  // const $ = cheerio.load(htmlString);
-  //  let navigation = parseInt($(".pagination ol option").length);
-  for (let i = 1; i < 2; i++) {
-    let url = `https://www.mangago.me/home/manga/list/solo_leveling/1/?page=${i}`
+async function getRecList(mangaToCompare, number1, number2) {
+  let recLists = [];
+  for (let i = number1; i < number2; i++) {
+    let url = `https://www.mangago.me/home/manga/list/${mangaToCompare}/1/?page=${i}`;
     let html = await getHTML(url);
-    let getList = getOneListData(html)
+    let getList = getOneRecList(html);
     recLists.push(getList);
     recLists = _.flattenDeep(recLists);
   }
   return recLists;
 }
-
-
-let mangas = []
-getRecList().then((data) => {
-  console.log(data.length, "number of lists")
-
-  for (let i = 0; i < data.length; i++) {
-    let link = data[i].link;
-    if (data[i].link) {
-      link = link.replace("https://www.mangago.me/home/mangalist/", "")
-      link = link.replace("/", "")
-      getMangaGoList(link).then((response) => {
-        console.log(response)
-        mangas.push(response)
-      })
-    }
-  }
-})
-console.log("YES", mangas.length)
-function getOneListData(htmlString) {
+//
+function getOneRecList(htmlString) {
   let recLists = [];
   const $ = cheerio.load(htmlString);
-  let recLinks = $("div[style='border-bottom:1px dashed #bdbdbd;width:620px;float:left;line-height:25px;padding:10px 0']");
+  let recLinks = $(
+    "div[style='border-bottom:1px dashed #bdbdbd;width:620px;float:left;line-height:25px;padding:10px 0']"
+  );
   recLinks.each((index, element) => {
-    let date = $(element).find("span[style='text-align:right;color:#bdbdbd;font-size:13px;width:100px;line-height:50px;']").text();
+    let date = $(element)
+      .find(
+        "span[style='text-align:right;color:#bdbdbd;font-size:13px;width:100px;line-height:50px;']"
+      )
+      .text();
     if (moment(date).isAfter(moment("2021-12-31"))) {
       let link = $(element)
         .find("a[href*=https://www.mangago.me/home/mangalist/]")
         .attr("href");
       let title = $(element)
         .find("a[href*=https://www.mangago.me/home/mangalist/]")
-        .text()
+        .text();
       let obj = { title, link, date };
       recLists.push(obj);
     }
@@ -69,46 +143,31 @@ function getOneListData(htmlString) {
   return recLists;
 }
 
-// console.log(getRecList(mangaPageRecs))
-// console.log(recLinks)
-// one at a time
-async function getNavigation(htmlString, listID) {
-  let allData = []
-  const $ = cheerio.load(htmlString);
+// input: 2359589
+async function getListData(LIST_ID) {
+  let firstPage = await getHTML(
+    `https://www.mangago.me/home/mangalist/${LIST_ID}`
+  );
+  let data = [];
+  const $ = cheerio.load(firstPage);
   let navigation = parseInt($(".navigation option").length);
   for (let j = 1; j <= navigation; j++) {
-    let listUrl = `https://www.mangago.me/home/mangalist/${listID}/?filter=&page=${j}`;
-    let mangaData = await getHTML(listUrl);
-    let data = getOnePage(mangaData);
-    allData.push(data)
-    allData = _.flattenDeep(allData)
+    let listUrl = `https://www.mangago.me/home/mangalist/${LIST_ID}/?filter=&page=${j}`;
+    let getData = await getHTML(listUrl);
+    let getPage = getOnePage(getData);
+    data.push(getPage);
   }
-  return allData;
+  return _.flattenDeep(data);
 }
-async function getMangaGoList(listID) {
-  let mangaUrl = `https://www.mangago.me/home/mangalist/${listID}`
-  let html = await getHTML(mangaUrl);
-  let data = await getNavigation(html, listID);
-  return data;
-}
-
-// getMangaGoList(LIST_ID).then((response) => {
-//  console.log(response)
-// })
-let recListUrl = "https://www.mangago.me/home/manga/list/solo_leveling/1/"
-
-// getHTML(recListUrl).then((response) => {
-
-// })
+// input: html of https://www.mangago.me/home/mangalist/2359589 / page whatever
 function getOnePage(htmlString) {
   const mangas = [];
   const $ = cheerio.load(htmlString);
-  fs.writeFileSync("./test.html", htmlString)
   const sections = $(".comment");
   sections.each((index, element) => {
-    let filterForConditions = $(element).text().toLowerCase()
-    let no = filterForConditions.includes("yaoi")
-    let no2 = filterForConditions.includes("yuri")
+    let filterForConditions = $(element).text().toLowerCase();
+    let no = filterForConditions.includes("yaoi");
+    let no2 = filterForConditions.includes("yuri");
     if (!no && !no2) {
       let title = $(element).find(".title a").text();
       if (title.length > 1) {
@@ -125,8 +184,6 @@ function getOnePage(htmlString) {
         mangas.push(obj);
       }
     }
-
   });
-  return mangas;
+  return _.flattenDeep(mangas);
 }
-// console.log(getOnePage(listHTML))
