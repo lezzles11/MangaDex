@@ -37,6 +37,29 @@ const minimal_args = [
   "--use-gl=swiftshader",
   "--use-mock-keychain",
 ];
+function renameAndDelete() {
+  let FOLDER_NAME = "./data";
+  let myData = fs.readFileSync("./myData.json");
+  let parsed = JSON.parse(myData);
+  // just get the top that have at least 6, delete the rest.
+  fs.readdirSync(FOLDER_NAME).forEach((file) => {
+    if (file.endsWith(".json")) {
+      let fileName = `${FOLDER_NAME}/${file}`;
+      let getData = fs.readFileSync(fileName);
+      let arr = JSON.parse(getData);
+      if (numberOfSimilarities(parsed, arr) <= 6) {
+        fs.unlinkSync(fileName);
+      } else {
+        let numbersOnly = file.split("_");
+        numbersOnly = numbersOnly[numbersOnly.length - 1];
+        numbersOnly = `${FOLDER_NAME}/${numbersOnly}`;
+        fs.renameSync(fileName, numbersOnly);
+      }
+    } else {
+      console.log("not json");
+    }
+  });
+}
 async function getHTML(url) {
   const browser = await puppeteer.launch({
     headless: "old",
