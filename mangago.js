@@ -4,7 +4,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const moment = require("moment");
 const _ = require("lodash");
-const { getHTML } = require("./utils");
+const { getHTML, numberOfSimilarities } = require("./utils");
 
 class MangaGoTest {
   // get a list of mangas
@@ -51,11 +51,14 @@ class MangaGoTest {
     console.log(data);
   }
   async final() {
+    let naughty = "2380785";
+    let toCompare2 = "inso_s_law";
     let myList = "2359589";
-    let toCompare = "inso_s_law";
-    let number1 = 201;
-    let number2 = 500;
-    await generateMangaData(myList, toCompare, number1, number2);
+    let toCompare =
+      "jk_s_tragic_isekai_reincarnation_as_the_villainess_but_my_precious_side_character";
+    let number1 = 1;
+    let number2 = 200;
+    await generateMangaData(myList, toCompare2, 501, 800);
   }
 }
 
@@ -73,13 +76,7 @@ let test = new MangaGoTest();
 // test.one();
 // test.two();
 // test.three();
-test.final();
 // test.final();
-
-function numberOfSimilarities(arr1, arr2) {
-  const similarities = _.intersectionWith(arr1, arr2, _.isEqual);
-  return similarities.length;
-}
 
 async function loopThroughRecList(myList, manga, number1, number2) {
   let myMangas = await getListData(myList);
@@ -90,7 +87,7 @@ async function loopThroughRecList(myList, manga, number1, number2) {
     link = link.replace("https://www.mangago.me/home/mangalist/", "");
     link = link.replace("/", "");
     let data = await getListData(link);
-    if (numberOfSimilarities(myMangas, data) > 6) {
+    if (numberOfSimilarities(myMangas, data) > 3) {
       console.log("page", recList[i]);
       console.log("LINK", link);
       data = _.orderBy(data, "rating", "desc");
@@ -187,3 +184,5 @@ function getOnePage(htmlString) {
   });
   return _.flattenDeep(mangas);
 }
+
+module.exports = { getListData };

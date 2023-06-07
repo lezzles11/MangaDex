@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+const _ = require("lodash");
 const minimal_args = [
   "--autoplay-policy=user-gesture-required",
   "--disable-background-networking",
@@ -68,4 +69,8 @@ async function getHTML(url) {
   return html;
 }
 
-module.exports = { getHTML };
+function numberOfSimilarities(arr1, arr2) {
+  const similarities = _.intersectionWith(arr1, arr2, _.isEqual);
+  return similarities.length;
+}
+module.exports = { getHTML, numberOfSimilarities };
