@@ -61,39 +61,51 @@ function renameAndDelete() {
   });
 }
 async function getHTML(url) {
-  const browser = await puppeteer.launch({
-    headless: "old",
-    args: minimal_args,
-  });
-  const page = await browser.newPage();
-  await page.setRequestInterception(true);
-  page.on("request", (req) => {
-    if (req.resourceType() === "image") {
-      req.abort();
-    } else {
-      req.continue();
-    }
-  });
+  try {
+    const browser = await puppeteer.launch({
+      headless: "old",
+      args: minimal_args,
+    });
+    const page = await browser.newPage();
+    await page.setRequestInterception(true);
+    page.on("request", (req) => {
+      if (req.resourceType() === "image") {
+        req.abort();
+      } else {
+        req.continue();
+      }
+    });
 
-  await page.setUserAgent(
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
-  );
-  await page.setViewport({
-    width: 576,
-    height: 767,
-  });
-  await page.goto(url, {
-    waitUntil: "load",
-    timeout: 0,
-  });
-  const html = await page.content();
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+    );
+    await page.setViewport({
+      width: 576,
+      height: 767,
+    });
+    await page.goto(url, {
+      waitUntil: "load",
+      timeout: 0,
+    });
+    const html = await page.content();
 
-  await browser.close();
-  return html;
+    await browser.close();
+    return html;
+  } catch (error) {
+    console.log("HTML ERROR: ", error);
+  }
 }
 
 function numberOfSimilarities(arr1, arr2) {
   const similarities = _.intersectionWith(arr1, arr2, _.isEqual);
   return similarities.length;
 }
-module.exports = { getHTML, numberOfSimilarities };
+function getDifference(toCompare, original) {
+  const difference = _.differenceWith(
+    toCompare,
+    original,
+    (obj1, obj2) => obj1.title === obj2.title
+  );
+  return difference;
+}
+module.exports = { getHTML, numberOfSimilarities, getDifference };

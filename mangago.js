@@ -56,29 +56,17 @@ class MangaGoTest {
     let myList = "2359589";
     let toCompare =
       "jk_s_tragic_isekai_reincarnation_as_the_villainess_but_my_precious_side_character";
-    let number1 = 1;
-    let number2 = 200;
-    await generateMangaData(myList, toCompare2, 501, 800);
+    await loopThroughRecList(myList, "eleceed", 1, 200, 9.4);
   }
 }
 
-async function generateMangaData(myList, toCompare, number1, number2) {
-  let getRangeOfLists = await loopThroughRecList(
-    myList,
-    toCompare,
-    number1,
-    number2
-  );
-  let fileName = `./data/${toCompare}_${number1}_${number2}.json`;
-  fs.writeFileSync(fileName, getRangeOfLists);
-}
 let test = new MangaGoTest();
 // test.one();
 // test.two();
 // test.three();
-// test.final();
+test.final();
 
-async function loopThroughRecList(myList, manga, number1, number2) {
+async function loopThroughRecList(myList, manga, number1, number2, minRating) {
   let myMangas = await getListData(myList);
   let getMangas = [];
   let recList = await getRecList(manga, number1, number2);
@@ -87,7 +75,7 @@ async function loopThroughRecList(myList, manga, number1, number2) {
     link = link.replace("https://www.mangago.me/home/mangalist/", "");
     link = link.replace("/", "");
     let data = await getListData(link);
-    if (numberOfSimilarities(myMangas, data) > 3) {
+    if (numberOfSimilarities(myMangas, data) > minRating) {
       console.log("page", recList[i]);
       console.log("LINK", link);
       data = _.orderBy(data, "rating", "desc");

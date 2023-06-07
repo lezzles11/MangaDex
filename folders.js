@@ -25,7 +25,7 @@ class Test {
 let test = new Test();
 // test.one();
 // test.two();
-test.three();
+// test.three();
 
 function getSimilarData(numberSimilar, minRating) {
   let myData = fs.readFileSync("./myData.json");
