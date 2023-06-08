@@ -1,11 +1,6 @@
 const fs = require("fs");
 const _ = require("lodash");
-const axios = require("axios");
-const { numberOfSimilarities } = require("./utils");
-const { getListData } = require("./mangago");
-// Other potentials:
-// Lists that have like 10+ similarities
-//
+const { numberOfSimilarities, orderBy } = require("./arrays");
 
 class Test {
   one() {
@@ -27,7 +22,31 @@ let test = new Test();
 // test.two();
 // test.three();
 
-function getSimilarData(numberSimilar, minRating) {
+function renameAndDelete() {
+  let FOLDER_NAME = "./data";
+  let myData = fs.readFileSync("./myData.json");
+  let parsed = JSON.parse(myData);
+  // just get the top that have at least 6, delete the rest.
+  fs.readdirSync(FOLDER_NAME).forEach((file) => {
+    if (file.endsWith(".json")) {
+      let fileName = `${FOLDER_NAME}/${file}`;
+      let getData = fs.readFileSync(fileName);
+      let arr = JSON.parse(getData);
+      if (numberOfSimilarities(parsed, arr) <= 6) {
+        fs.unlinkSync(fileName);
+      } else {
+        let numbersOnly = file.split("_");
+        numbersOnly = numbersOnly[numbersOnly.length - 1];
+        numbersOnly = `${FOLDER_NAME}/${numbersOnly}`;
+        fs.renameSync(fileName, numbersOnly);
+      }
+    } else {
+      console.log("not json");
+    }
+  });
+}
+
+function getSimilarData(getFunction, condition) {
   let myData = fs.readFileSync("./myData.json");
   let parsed = JSON.parse(myData);
   let data = [];
@@ -35,16 +54,16 @@ function getSimilarData(numberSimilar, minRating) {
     if (file.endsWith(".json")) {
       let getData = fs.readFileSync(`./data/${file}`);
       let arr = JSON.parse(getData);
-      if (numberOfSimilarities(parsed, arr) >= numberSimilar) {
-        const filteredData = arr.filter((obj) => obj.rating > minRating);
-        data.push(filteredData);
+      let pass = getFunction(parsed, arr, condition);
+      if (pass) {
+        data.push(arr);
         data = _.flattenDeep(data);
       }
     } else {
       console.log("not json");
     }
   });
-  return data;
+  return orderBy(data);
 }
 
 function getData(minRating) {
@@ -60,15 +79,7 @@ function getData(minRating) {
       console.log("not json");
     }
   });
-  return data;
+  return orderBy(data);
 }
-function freqCount(arr) {
-  const frequency = arr.reduce((count, obj) => {
-    const key = JSON.stringify(obj);
-    count[key] = (count[key] || 0) + 1;
-    return count;
-  }, {});
-  const sortedArray = Object.entries(frequency).sort((a, b) => b[1] - a[1]);
-  const sortedObj = Object.fromEntries(sortedArray);
-  return sortedObj;
-}
+
+module.exports = { renameAndDelete, getSimilarData, getData };

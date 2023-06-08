@@ -1,15 +1,29 @@
 const _ = require("lodash");
+const fs = require("fs");
+const { loopThroughRecList } = require("./services");
+const {
+  MY_LIST,
+  NAUGHTY_LIST,
+  MIN_RATING,
+  MIN_SIMILAR,
+  MIN_JACCARD,
+  MIN_OVERLAP,
+  TO_COMPARE,
+} = require("./config");
+const {
+  jaccard,
+  overlap,
+  minSimilar,
+  getSimilarData,
+  freqCount,
+} = require("./utils");
+/*
+loopThroughRecList(MY_LIST, TO_COMPARE, 1, 2, 2).then((response) => {
+  console.log(response, "works");
+});
+*/
 
-const sampleData = [
-  {
-    title: "A",
-    rating: 9,
-    link: "www.a.com",
-  },
-  {
-    title: "A",
-    rating: 9,
-    link: "www.a.com",
-  },
-  { title: "B", rating: 8.7, link: "www.b.com" },
-];
+let data = getSimilarData(minSimilar, 10);
+let counted = freqCount(data);
+let parsed = JSON.stringify(counted);
+fs.writeFileSync("./output/minSimilar.json", parsed);
