@@ -31,7 +31,7 @@ function overlap(userA, userB, minRating) {
   ).length;
   const minSize = Math.min(setA.size, setB.size);
   let rating = intersectionSize / minSize;
-  if (minRating > rating) {
+  if (rating > minRating) {
     return true;
   } else {
     return false;

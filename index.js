@@ -23,7 +23,7 @@ loopThroughRecList(MY_LIST, TO_COMPARE, 1, 2, 2).then((response) => {
 });
 */
 
-let data = getSimilarData(minSimilar, 10);
+let data = getSimilarData(overlap, 0.7);
 let counted = freqCount(data);
 let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/minSimilar.json", parsed);
+fs.writeFileSync("./output/overlap.json", parsed);
