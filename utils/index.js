@@ -6,7 +6,7 @@ const {
   orderBy,
 } = require("./arrays");
 const { jaccard, overlap, minSimilar } = require("./conditions");
-const { renameAndDelete, getSimilarData, getData } = require("./folders");
+const { renameFile, getSimilarData, getData } = require("./folders");
 module.exports = {
   numberOfSimilarities,
   getDifference,
@@ -15,7 +15,7 @@ module.exports = {
   jaccard,
   overlap,
   minSimilar,
-  renameAndDelete,
+  renameFile,
   getSimilarData,
   getData,
   getHTML,

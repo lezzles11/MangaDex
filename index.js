@@ -16,11 +16,13 @@ const {
   minSimilar,
   getSimilarData,
   freqCount,
+  renameFile,
 } = require("./utils");
 
-loopThroughRecList(MY_LIST, TO_COMPARE, 801, 1200, 6).then((response) => {
+loopThroughRecList(MY_LIST, TO_COMPARE, 801, 1300, 6).then((response) => {
   console.log(response, "works");
 });
+// renameFile();
 
 // let data = getSimilarData(overlap, 0.7);
 // let counted = freqCount(data);
