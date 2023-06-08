@@ -17,13 +17,12 @@ const {
   getSimilarData,
   freqCount,
 } = require("./utils");
-/*
-loopThroughRecList(MY_LIST, TO_COMPARE, 1, 2, 2).then((response) => {
+
+loopThroughRecList(MY_LIST, TO_COMPARE, 801, 1200, 6).then((response) => {
   console.log(response, "works");
 });
-*/
 
-let data = getSimilarData(overlap, 0.7);
-let counted = freqCount(data);
-let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/overlap.json", parsed);
+// let data = getSimilarData(overlap, 0.7);
+// let counted = freqCount(data);
+// let parsed = JSON.stringify(counted);
+// fs.writeFileSync("./output/overlap.json", parsed);

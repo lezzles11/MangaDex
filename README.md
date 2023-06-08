@@ -9,7 +9,7 @@ To find and compile the best mangas
 ## Steps
 
 - Did inso's law - page 1-800
-- Did eleceed - page 1-800 (1-200 was a bit fucked)
+- Did eleceed - page 1-1200 (1-200 was a bit fucked)
 
 
 

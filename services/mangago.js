@@ -74,7 +74,7 @@ async function loopThroughRecList(myList, manga, number1, number2, minSim) {
     link = link.replace("/", "");
     let data = await getListData(link);
     if (numberOfSimilarities(myMangas, data) > minSim) {
-      console.log("page", recList[i]);
+      console.log("page", i, "/", recList.length);
       console.log("LINK", link);
       data = _.orderBy(data, "rating", "desc");
       let fileName = `./data/${manga}_${link}.json`;
