@@ -1,6 +1,8 @@
 const fs = require("fs");
 const _ = require("lodash");
-const { numberOfSimilarities, orderBy } = require("./arrays");
+const { numberOfSimilarities, orderBy, getDifference } = require("./arrays");
+
+let testLinks = "https://www.mangago.me/home/mangalist/2372859";
 
 class Test {
   one() {
@@ -47,7 +49,8 @@ function getSimilarData(getFunction, condition) {
       let arr = JSON.parse(getData);
       let pass = getFunction(parsed, arr, condition);
       if (pass) {
-        data.push(arr);
+        let getDiff = getDifference(arr, parsed);
+        data.push(getDiff);
         data = _.flattenDeep(data);
       }
     } else {
@@ -73,4 +76,14 @@ function getData(minRating) {
   return orderBy(data);
 }
 
-module.exports = { renameFile, getSimilarData, getData };
+function getAllFolderB4Json(folderName) {
+  let fileNames = fs.readdirSync(folderName);
+  let names = [];
+  fileNames.forEach((name) => {
+    let number = name.split(".");
+    let getName = number[0];
+    names.push(getName);
+  });
+  return names;
+}
+module.exports = { renameFile, getSimilarData, getData, getAllFolderB4Json };

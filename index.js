@@ -24,7 +24,7 @@ const {
 // });
 // renameFile();
 
-let data = getSimilarData(minSimilar, 10);
-let counted = freqCount(data);
-let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/overlap.json", parsed);
+// let data = getSimilarData(minSimilar, 11);
+// let counted = freqCount(data);
+// let parsed = JSON.stringify(counted);
+// fs.writeFileSync("./output/minSimilar.json", parsed);

@@ -6,7 +6,12 @@ const {
   orderBy,
 } = require("./arrays");
 const { jaccard, overlap, minSimilar } = require("./conditions");
-const { renameFile, getSimilarData, getData } = require("./folders");
+const {
+  renameFile,
+  getSimilarData,
+  getData,
+  getAllFolderB4Json,
+} = require("./folders");
 module.exports = {
   numberOfSimilarities,
   getDifference,
@@ -18,5 +23,6 @@ module.exports = {
   renameFile,
   getSimilarData,
   getData,
+  getAllFolderB4Json,
   getHTML,
 };

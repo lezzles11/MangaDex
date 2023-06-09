@@ -2,7 +2,11 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const moment = require("moment");
 const _ = require("lodash");
-const { getHTML, numberOfSimilarities } = require("../utils");
+const {
+  getHTML,
+  numberOfSimilarities,
+  getAllFolderB4Json,
+} = require("../utils");
 
 class MangaGoTest {
   // get a list of mangas
@@ -103,6 +107,7 @@ async function getRecList(mangaToCompare, number1, number2) {
 function getOneRecList(htmlString) {
   let recLists = [];
   const $ = cheerio.load(htmlString);
+  let allFiles = getAllFolderB4Json("./data");
   let recLinks = $(
     "div[style='border-bottom:1px dashed #bdbdbd;width:620px;float:left;line-height:25px;padding:10px 0']"
   );
@@ -116,11 +121,15 @@ function getOneRecList(htmlString) {
       let link = $(element)
         .find("a[href*=https://www.mangago.me/home/mangalist/]")
         .attr("href");
-      let title = $(element)
-        .find("a[href*=https://www.mangago.me/home/mangalist/]")
-        .text();
-      let obj = { title, link, date };
-      recLists.push(obj);
+      let getId = link.split("mangalist/");
+      getId = link[1];
+      if (!allFiles.includes(getId)) {
+        let title = $(element)
+          .find("a[href*=https://www.mangago.me/home/mangalist/]")
+          .text();
+        let obj = { title, link, date };
+        recLists.push(obj);
+      }
     }
   });
   return recLists;
