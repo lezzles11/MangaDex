@@ -13,6 +13,7 @@ const {
 const {
   jaccard,
   overlap,
+  sorensenDice,
   minSimilar,
   getSimilarData,
   freqCount,
@@ -25,10 +26,10 @@ const {
 // });
 // renameFile();
 
-let data = getSimilarData(minSimilar, 4);
+let data = getSimilarData(sorensenDice, 0.1);
 let counted = freqCount(data);
 let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/minSimilar.json", parsed);
+fs.writeFileSync("./output/sorensen.json", parsed);
 
 // function getHent() {
 //   let data = [];

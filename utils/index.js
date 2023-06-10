@@ -5,7 +5,7 @@ const {
   freqCount,
   orderBy,
 } = require("./arrays");
-const { jaccard, overlap, minSimilar } = require("./conditions");
+const { jaccard, overlap, minSimilar, sorensenDice } = require("./conditions");
 const {
   renameFile,
   getSimilarData,
@@ -20,6 +20,7 @@ module.exports = {
   jaccard,
   overlap,
   minSimilar,
+  sorensenDice,
   renameFile,
   getSimilarData,
   getData,

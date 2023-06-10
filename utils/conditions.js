@@ -38,4 +38,19 @@ function overlap(userA, userB, minRating) {
   }
 }
 
-module.exports = { jaccard, overlap, minSimilar };
+function sorensenDice(arr1, arr2, minRating) {
+  const set1 = new Set(arr1.map((item) => item["title"]));
+  const set2 = new Set(arr2.map((item) => item["title"]));
+  const intersectionSize = new Set(
+    arr1.filter((item) => set2.has(item["title"]))
+  ).size;
+  const denominator = set1.size + set2.size;
+  let rating = (2 * intersectionSize) / denominator;
+  if (rating > minRating) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+module.exports = { jaccard, overlap, minSimilar, sorensenDice };
