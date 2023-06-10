@@ -19,9 +19,9 @@ const {
   renameFile,
 } = require("./utils");
 
-// loopThroughRecList(MY_LIST, TO_COMPARE, 801, 1300, 6).then((response) => {
-//   console.log(response, "works");
-// });
+loopThroughRecList(MY_LIST, TO_COMPARE, 1, 400, 6).then((response) => {
+  console.log(response, "works");
+});
 // renameFile();
 
 // let data = getSimilarData(minSimilar, 11);
