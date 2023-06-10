@@ -81,7 +81,7 @@ async function loopThroughRecList(myList, manga, number1, number2, minSim) {
       console.log("page", i, "/", recList.length);
       console.log("LINK", link);
       data = _.orderBy(data, "rating", "desc");
-      let fileName = `./data/${manga}_${link}.json`;
+      let fileName = `./eleceed/${manga}_${link}.json`;
       let stringed = JSON.stringify(data);
       fs.writeFileSync(fileName, stringed);
       getMangas.push(data);
