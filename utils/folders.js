@@ -25,7 +25,7 @@ let test = new Test();
 // test.three();
 
 function renameFile() {
-  let FOLDER_NAME = "./testData";
+  let FOLDER_NAME = "./eleceed";
   fs.readdirSync(FOLDER_NAME).forEach((file) => {
     if (file.endsWith(".json") && file.includes("_")) {
       let fileName = `${FOLDER_NAME}/${file}`;
