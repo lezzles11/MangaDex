@@ -1,2 +1,2 @@
-const { loopThroughRecList } = require("./mangago");
-module.exports = { loopThroughRecList };
+const { loopThroughRecList, getListData } = require("./mangago");
+module.exports = { loopThroughRecList, getListData };

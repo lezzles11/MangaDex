@@ -10,7 +10,7 @@ To find and compile the best mangas
 
 - Did inso's law - page 1-800
 - Did eleceed - page 500-1100 
-
+40 
 ### API 
 
 - 

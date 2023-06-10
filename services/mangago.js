@@ -180,4 +180,4 @@ function getOnePage(htmlString) {
   return _.flattenDeep(mangas);
 }
 
-module.exports = { loopThroughRecList };
+module.exports = { loopThroughRecList, getListData };
