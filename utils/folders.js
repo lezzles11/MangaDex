@@ -19,7 +19,7 @@ class Test {
     fs.writeFileSync("./test2.json", stringed);
   }
 }
-let test = new Test();
+// let test = new Test();
 // test.one();
 // test.two();
 // test.three();
@@ -49,8 +49,9 @@ function getSimilarData(getFunction, condition) {
       let arr = JSON.parse(getData);
       let pass = getFunction(parsed, arr, condition);
       if (pass) {
-        let getDiff = getDifference(arr, parsed);
-        data.push(getDiff);
+        //let getDiff = getDifference(arr, parsed);
+        // data.push(getDiff);
+        data.push(arr);
         data = _.flattenDeep(data);
       }
     } else {

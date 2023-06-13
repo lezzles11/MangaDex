@@ -62,7 +62,7 @@ class MangaGoTest {
   }
 }
 
-let test = new MangaGoTest();
+// let test = new MangaGoTest();
 // test.one();
 // test.two();
 // test.three();
