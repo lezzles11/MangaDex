@@ -21,13 +21,13 @@ const {
   orderBy,
 } = require("./utils");
 // did 1-600
-// loopThroughRecList(MY_LIST, TO_COMPARE, 401, 600, 5).then((response) => {
-//   console.log(response, "works");
-// });
+loopThroughRecList(MY_LIST, TO_COMPARE, 601, 900, 5).then((response) => {
+  console.log(response, "works");
+});
 // renameFile();
 
-let data = getSimilarData(minSimilar, 5);
+// let data = getSimilarData(minSimilar, 5);
 
-let counted = freqCount(data);
-let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/similar.json", parsed);
+// let counted = freqCount(data);
+// let parsed = JSON.stringify(counted);
+// fs.writeFileSync("./output/similar.json", parsed);
