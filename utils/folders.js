@@ -25,7 +25,7 @@ class Test {
 // test.three();
 
 function renameFile() {
-  let FOLDER_NAME = "./eleceed";
+  let FOLDER_NAME = "./deleteMac";
   fs.readdirSync(FOLDER_NAME).forEach((file) => {
     if (file.endsWith(".json") && file.includes("_")) {
       let fileName = `${FOLDER_NAME}/${file}`;
@@ -49,9 +49,9 @@ function getSimilarData(getFunction, condition) {
       let arr = JSON.parse(getData);
       let pass = getFunction(parsed, arr, condition);
       if (pass) {
-        //let getDiff = getDifference(arr, parsed);
-        // data.push(getDiff);
-        data.push(arr);
+        let getDiff = getDifference(arr, parsed);
+        data.push(getDiff);
+        // data.push(arr);
         data = _.flattenDeep(data);
       }
     } else {

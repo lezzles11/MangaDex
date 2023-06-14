@@ -20,14 +20,14 @@ const {
   renameFile,
   orderBy,
 } = require("./utils");
-
-// loopThroughRecList(MY_LIST, TO_COMPARE, 1, 400, 6).then((response) => {
+// did 1-600
+// loopThroughRecList(MY_LIST, TO_COMPARE, 401, 600, 5).then((response) => {
 //   console.log(response, "works");
 // });
 // renameFile();
 
-// let data = getSimilarData(jaccard, 0.08);
+let data = getSimilarData(minSimilar, 5);
 
-// let counted = freqCount(data);
-// let parsed = JSON.stringify(counted);
-// fs.writeFileSync("./output/jaccard.json", parsed);
+let counted = freqCount(data);
+let parsed = JSON.stringify(counted);
+fs.writeFileSync("./output/similar.json", parsed);

@@ -122,7 +122,7 @@ function getOneRecList(htmlString) {
         .find("a[href*=https://www.mangago.me/home/mangalist/]")
         .attr("href");
       let getId = link.split("mangalist/");
-      getId = link[1];
+      getId = link[1] + ".json";
       if (!allFiles.includes(getId)) {
         let title = $(element)
           .find("a[href*=https://www.mangago.me/home/mangalist/]")
