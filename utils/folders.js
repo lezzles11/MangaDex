@@ -25,7 +25,7 @@ class Test {
 // test.three();
 
 function renameFile() {
-  let FOLDER_NAME = "./deleteMac";
+  let FOLDER_NAME = "./deletemac";
   fs.readdirSync(FOLDER_NAME).forEach((file) => {
     if (file.endsWith(".json") && file.includes("_")) {
       let fileName = `${FOLDER_NAME}/${file}`;
