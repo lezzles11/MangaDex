@@ -25,7 +25,7 @@ const {
 //   console.log(response, "works");
 // });
 // renameFile();
-let data = getSimilarData(minSimilar, 4);
+let data = getSimilarData(minSimilar, 12);
 let counted = freqCount(data);
 let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/similar.json", parsed);
+fs.writeFileSync("./output/similar12.json", parsed);
