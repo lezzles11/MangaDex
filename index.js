@@ -25,7 +25,17 @@ const {
 //   console.log(response, "works");
 // });
 // renameFile();
-let data = getSimilarData(minSimilar, 12);
+// let data = getSimilarData(jaccard, 0.09);
+// let counted = freqCount(data);
+// let parsed = JSON.stringify(counted);
+// fs.writeFileSync("./output/jaccard.json", parsed);
+
+let data = getSimilarData(overlap, 0.5);
 let counted = freqCount(data);
 let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/similar12.json", parsed);
+fs.writeFileSync("./output/overlap.json", parsed);
+
+// getListData(MY_LIST).then((result) => {
+//   let stringed = JSON.stringify(result);
+//   fs.writeFileSync("./myData.json", stringed);
+// });
