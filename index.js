@@ -30,12 +30,13 @@ const {
 // let parsed = JSON.stringify(counted);
 // fs.writeFileSync("./output/jaccard.json", parsed);
 
-let data = getSimilarData(overlap, 0.5);
+let data = getSimilarData(overlap, 0.4);
 let counted = freqCount(data);
 let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/overlap.json", parsed);
+fs.writeFileSync("./output/overlap_naughty.json", parsed);
 
-// getListData(MY_LIST).then((result) => {
+// getListData(NAUGHTY_LIST).then((result) => {
 //   let stringed = JSON.stringify(result);
-//   fs.writeFileSync("./myData.json", stringed);
+//   console.log(stringed);
+//   fs.writeFileSync("./naughty_list.json", stringed);
 // });

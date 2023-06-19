@@ -143,13 +143,22 @@ async function getListData(LIST_ID) {
   let data = [];
   const $ = cheerio.load(firstPage);
   let navigation = parseInt($(".navigation option").length);
-  for (let j = 1; j <= navigation; j++) {
-    let listUrl = `https://www.mangago.me/home/mangalist/${LIST_ID}/?filter=&page=${j}`;
+  if (navigation == 0) {
+    let listUrl = `https://www.mangago.me/home/mangalist/${LIST_ID}/?filter=&page=1`;
     let getData = await getHTML(listUrl);
     let getPage = getOnePage(getData);
     data.push(getPage);
+    return _.flattenDeep(data);
+  } else {
+    for (let j = 1; j <= navigation; j++) {
+      let listUrl = `https://www.mangago.me/home/mangalist/${LIST_ID}/?filter=&page=${j}`;
+      let getData = await getHTML(listUrl);
+      let getPage = getOnePage(getData);
+      console.log(getPage);
+      data.push(getPage);
+    }
+    return _.flattenDeep(data);
   }
-  return _.flattenDeep(data);
 }
 // input: html of https://www.mangago.me/home/mangalist/2359589 / page whatever
 function getOnePage(htmlString) {

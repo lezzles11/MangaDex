@@ -1,5 +1,5 @@
 const MY_LIST = "2359589";
-const NAUGHTY_LIST = "";
+const NAUGHTY_LIST = "2380785";
 const MIN_RATING = 9.4;
 const MIN_SIMILAR = 6;
 const MIN_JACCARD = 0.1;
