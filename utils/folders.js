@@ -40,8 +40,8 @@ function renameFile() {
 }
 
 function getSimilarData(getFunction, condition) {
-  // let myData = fs.readFileSync("./myData.json");
-  let myData = fs.readFileSync("./naughty_list.json");
+  let myData = fs.readFileSync("./myData.json");
+  // let myData = fs.readFileSync("./naughty_list.json");
   let parsed = JSON.parse(myData);
   let data = [];
   fs.readdirSync("./data").forEach((file) => {
