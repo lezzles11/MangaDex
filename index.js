@@ -25,10 +25,10 @@ const {
 //   console.log(response, "works");
 // });
 // renameFile();
-let data = getSimilarData(minSimilar, 12);
+let data = getSimilarData(minSimilar, 9);
 let counted = freqCount(data);
 let parsed = JSON.stringify(counted);
-fs.writeFileSync("./output/minSimilar12.json", parsed);
+fs.writeFileSync("./output/minSimilar9.json", parsed);
 
 // let data = getSimilarData(overlap, 0.4);
 // let counted = freqCount(data);
