@@ -1,6 +1,5 @@
 const {
   MY_LIST,
-  NAUGHTY_LIST,
   MIN_RATING,
   MIN_SIMILAR,
   MIN_JACCARD,
@@ -9,7 +8,6 @@ const {
 } = require("./constants");
 module.exports = {
   MY_LIST,
-  NAUGHTY_LIST,
   MIN_RATING,
   MIN_SIMILAR,
   MIN_JACCARD,

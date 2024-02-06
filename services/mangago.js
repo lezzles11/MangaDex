@@ -11,7 +11,7 @@ const {
 class MangaGoTest {
   // get a list of mangas
   async one() {
-    let listUrl = `https://www.mangago.me/home/mangalist/2359589/?filter=&page=1`;
+    let listUrl = `https://www.mangago.me/home/mangalist/123/?filter=&page=1`;
     let htmlString = await getHTML(listUrl);
     let getPage = getOnePage(htmlString);
     if (getPage.length > 1) {
@@ -22,7 +22,7 @@ class MangaGoTest {
   }
   // can get list data
   async two() {
-    let navData = await getListData("2359589");
+    let navData = await getListData("123");
     let length = navData.length - 1;
     if (navData.length > 1) {
       if (navData[length].title && navData[length].rating) {
@@ -52,14 +52,7 @@ class MangaGoTest {
     let data = await loopThroughRecList(myList, toCompare, number1, number2);
     console.log(data);
   }
-  async final() {
-    let naughty = "2380785";
-    let toCompare2 = "inso_s_law";
-    let myList = "2359589";
-    let toCompare =
-      "jk_s_tragic_isekai_reincarnation_as_the_villainess_but_my_precious_side_character";
-    await loopThroughRecList(myList, "eleceed", 1, 200, 6);
-  }
+  async final() {}
 }
 
 // let test = new MangaGoTest();
@@ -167,8 +160,8 @@ function getOnePage(htmlString) {
   const sections = $(".comment");
   sections.each((index, element) => {
     let filterForConditions = $(element).text().toLowerCase();
-    let no = filterForConditions.includes("yaoi");
-    let no2 = filterForConditions.includes("yuri");
+    let no = filterForConditions.includes("asdf");
+    let no2 = filterForConditions.includes("adsf");
     if (!no && !no2) {
       let title = $(element).find(".title a").text();
       if (title.length > 1) {
